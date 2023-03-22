@@ -5,17 +5,20 @@ defmodule FizzBuzz do
     |> handle_file_read()
   end
 
-  def handle_file_read({:ok, result}) do
-    result
-    |> String.split(",")
-    |> Enum.map(&convert_to_fizz_buzz/1)
+  defp handle_file_read({:ok, result}) do
+    result = result
+      |> String.split(",")
+      |> Enum.map(&convert_to_fizz_buzz/1)
+
+      {:ok, result}
   end
 
-  def handle_file_read({:error, reason}), do: "Error reading the file: #{reason}"
+  defp handle_file_read({:error, reason}), do: {:error, "Error reading the file: #{reason}"}
 
   defp convert_to_fizz_buzz(element) do
-    number = String.to_integer(element)
-    evaluate_numbers(number)
+    element
+    |> String.to_integer()
+    |> evaluate_numbers()
   end
 
   defp evaluate_numbers(number) when rem(number, 3) == 0 and rem(number, 5) == 0, do: :fizzbuzz
